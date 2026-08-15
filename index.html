@@ -540,7 +540,7 @@
   </div>
   <div class="hud-status">
     <div class="status-chip"><div class="status-dot"></div> ONLINE</div>
-    <div class="model-badge">CLAUDE SONNET 4.6</div>
+   <div class="model-badge">OPENROUTER</div>
   </div>
 </div>
 
@@ -722,7 +722,7 @@ async function sendMessage() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-6',
+        model: 'anthropic/claude-sonnet-4-5',
         max_tokens: 1000,
         system: SYSTEM_PROMPT,
         messages: messages
