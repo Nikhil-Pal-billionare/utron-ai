@@ -576,6 +576,71 @@
   }
   .clear-btn:hover { border-color: var(--red); color: var(--red); }
 
+  .mic-btn {
+    width: 48px; height: 48px;
+    background: var(--dark3);
+    border: 1px solid var(--gray2);
+    border-radius: 2px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    flex-shrink: 0;
+    position: relative;
+    color: var(--text-dim);
+  }
+  .mic-btn svg { width: 18px; height: 18px; }
+  .mic-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .research-input-area .mic-btn:hover { border-color: var(--blue); color: var(--blue); }
+  .business-input-area .mic-btn:hover { border-color: var(--green); color: var(--green); }
+  .mic-btn.recording { background: var(--red); border-color: var(--red); color: #fff; animation: micPulse 1.1s infinite; }
+  .mic-btn.processing { border-color: var(--accent); color: var(--accent); }
+  .mic-btn.processing svg { animation: micSpin 0.8s linear infinite; }
+  @keyframes micPulse {
+    0%, 100% { box-shadow: 0 0 0 0 var(--red-glow); }
+    50% { box-shadow: 0 0 0 10px rgba(230,57,70,0); }
+  }
+  @keyframes micSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+  .msg-label { display: flex; align-items: center; gap: 8px; justify-content: space-between; }
+  .speak-btn {
+    background: none;
+    border: 1px solid var(--gray2);
+    color: var(--text-muted);
+    font-size: 10px;
+    width: 20px; height: 20px;
+    border-radius: 2px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    line-height: 1;
+  }
+  .speak-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .speak-btn.speaking { border-color: var(--accent); color: var(--accent); background: var(--accent-glow); animation: micPulse 1.1s infinite; }
+
+  .voice-toggle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--dark3);
+    border: 1px solid var(--gray2);
+    color: var(--text-dim);
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 1px;
+    padding: 6px 10px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .voice-toggle:hover { border-color: var(--accent); }
+  .voice-toggle.active { border-color: var(--accent); color: var(--accent); background: var(--accent-glow); }
+  .voice-toggle .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--text-muted); }
+  .voice-toggle.active .dot { background: var(--accent); box-shadow: 0 0 6px var(--accent); }
+
   .scan-line {
     position: fixed;
     top: 0; left: 0; right: 0;
@@ -613,6 +678,9 @@
     </div>
   </div>
   <div class="hud-status">
+    <button class="voice-toggle" id="autoSpeakBtn" onclick="toggleAutoSpeak()" title="AI ke replies apne aap bolwaaye">
+      <span class="dot"></span> AUTO VOICE
+    </button>
     <div class="status-chip"><div class="status-dot"></div> ONLINE</div>
     <div class="model-badge" id="modelBadge">CHAT MODULE</div>
   </div>
@@ -679,6 +747,9 @@
             <div class="input-corner br"></div>
             <textarea id="input-chat-ta" rows="1" placeholder="ENTER COMMAND..." onkeydown="handleKey(event,'chat')" oninput="autoResize(this);updateCount('chat',this)"></textarea>
           </div>
+          <button class="mic-btn" id="mic-chat" onclick="toggleMic('chat')" title="Bol kar bhejein">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+          </button>
           <button class="send-btn" id="send-chat" onclick="sendChat()">
             <svg viewBox="0 0 24 24"><path d="M22 2L11 13" stroke="white" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="white" stroke-width="2" stroke-linejoin="round" fill="none"/></svg>
           </button>
@@ -719,6 +790,9 @@
             <div class="input-corner br"></div>
             <textarea id="input-code-ta" rows="1" placeholder="ENTER CODE TASK..." onkeydown="handleKey(event,'code')" oninput="autoResize(this);updateCount('code',this)"></textarea>
           </div>
+          <button class="mic-btn" id="mic-code" onclick="toggleMic('code')" title="Bol kar bhejein">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+          </button>
           <button class="send-btn" id="send-code" onclick="sendCode()">
             <svg viewBox="0 0 24 24"><path d="M22 2L11 13" stroke="white" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="white" stroke-width="2" stroke-linejoin="round" fill="none"/></svg>
           </button>
@@ -759,6 +833,9 @@
             <div class="input-corner br"></div>
             <textarea id="input-create-ta" rows="1" placeholder="ENTER CREATIVE TASK..." onkeydown="handleKey(event,'create')" oninput="autoResize(this);updateCount('create',this)"></textarea>
           </div>
+          <button class="mic-btn" id="mic-create" onclick="toggleMic('create')" title="Bol kar bhejein">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+          </button>
           <button class="send-btn" id="send-create" onclick="sendCreate()">
             <svg viewBox="0 0 24 24"><path d="M22 2L11 13" stroke="white" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="white" stroke-width="2" stroke-linejoin="round" fill="none"/></svg>
           </button>
@@ -807,6 +884,9 @@
             <div class="input-corner br" style="border-color:var(--blue)"></div>
             <textarea id="input-research-ta" rows="1" placeholder="ENTER RESEARCH QUERY..." onkeydown="handleKey(event,'research')" oninput="autoResize(this);updateCount('research',this)"></textarea>
           </div>
+          <button class="mic-btn" id="mic-research" onclick="toggleMic('research')" title="Bol kar bhejein">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+          </button>
           <button class="send-btn blue" id="send-research" onclick="sendResearch()">
             <svg viewBox="0 0 24 24"><path d="M22 2L11 13" stroke="white" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="white" stroke-width="2" stroke-linejoin="round" fill="none"/></svg>
           </button>
@@ -852,6 +932,9 @@
             <div class="input-corner br" style="border-color:var(--green)"></div>
             <textarea id="input-business-ta" rows="1" placeholder="ASK YOUR BUSINESS MANAGER..." onkeydown="handleKey(event,'business')" oninput="autoResize(this);updateCount('business',this)"></textarea>
           </div>
+          <button class="mic-btn" id="mic-business" onclick="toggleMic('business')" title="Bol kar bhejein">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+          </button>
           <button class="send-btn green" id="send-business" onclick="sendBusiness()">
             <svg viewBox="0 0 24 24"><path d="M22 2L11 13" stroke="white" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="white" stroke-width="2" stroke-linejoin="round" fill="none"/></svg>
           </button>
@@ -879,6 +962,13 @@ const state = {
 };
 let researchDepth = 'standard';
 let totalMsgs = 0;
+
+// --- VOICE STATE (OpenRouter: deepgram/flux-tts for speaking, nvidia/nemotron-3-nano-omni for listening) ---
+let mediaRecorder = null;
+let audioChunks = [];
+let recordingMode = null;
+let autoSpeak = false;
+let currentAudio = null;
 
 const SYSTEM_PROMPTS = {
   chat: `You are ULTRON, a highly advanced AI assistant — powerful, precise, and confident like JARVIS from Iron Man. Be direct, intelligent, and highly capable. Handle any task: coding, analysis, writing, strategy.`,
@@ -975,7 +1065,17 @@ function appendMsg(mode, role, text) {
   const label = document.createElement('div');
   label.className = 'msg-label';
   const icons = { chat:'⬡ ULTRON', code:'⬡ CODE.EXE', create:'⬡ CREATIVE', research:'⬡ RESEARCH', business:'⬡ BIZ MGR' };
-  label.textContent = role === 'user' ? '▸ YOU' : icons[mode];
+  const labelText = document.createElement('span');
+  labelText.textContent = role === 'user' ? '▸ YOU' : icons[mode];
+  label.appendChild(labelText);
+  if (role === 'assistant') {
+    const speakBtn = document.createElement('button');
+    speakBtn.className = 'speak-btn';
+    speakBtn.title = 'Sunein';
+    speakBtn.innerHTML = '🔊';
+    speakBtn.onclick = () => speakText(text, speakBtn);
+    label.appendChild(speakBtn);
+  }
   div.appendChild(label);
   const bubble = document.createElement('div');
   bubble.className = 'msg-bubble';
@@ -984,6 +1084,10 @@ function appendMsg(mode, role, text) {
   div.appendChild(bubble);
   container.appendChild(div);
   container.scrollTop = container.scrollHeight;
+  if (role === 'assistant' && autoSpeak) {
+    const speakBtn = label.querySelector('.speak-btn');
+    speakText(text, speakBtn);
+  }
   return div;
 }
 
@@ -1018,6 +1122,153 @@ async function callChat(system, messages, maxTokens) {
   });
   const data = await res.json();
   return data.content?.[0]?.text || data.error?.message || 'No response.';
+}
+
+// ===================== VOICE INPUT (Speech-to-Text) =====================
+// Mic click -> record -> send to /api/stt (nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free)
+// -> fill textarea with what was understood -> auto-send.
+
+async function toggleMic(mode) {
+  const btn = document.getElementById('mic-' + mode);
+
+  if (mediaRecorder && mediaRecorder.state === 'recording') {
+    mediaRecorder.stop();
+    return;
+  }
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    alert('Is browser me microphone access support nahi hai.');
+    return;
+  }
+
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    audioChunks = [];
+    recordingMode = mode;
+
+    const mimeType = (window.MediaRecorder && MediaRecorder.isTypeSupported('audio/webm'))
+      ? 'audio/webm'
+      : (window.MediaRecorder && MediaRecorder.isTypeSupported('audio/mp4') ? 'audio/mp4' : '');
+
+    mediaRecorder = new MediaRecorder(stream, mimeType ? { mimeType } : undefined);
+
+    mediaRecorder.ondataavailable = (e) => { if (e.data && e.data.size > 0) audioChunks.push(e.data); };
+
+    mediaRecorder.onstop = async () => {
+      stream.getTracks().forEach(t => t.stop());
+      document.querySelectorAll('.mic-btn').forEach(b => b.classList.remove('recording'));
+      const blob = new Blob(audioChunks, { type: mediaRecorder.mimeType || 'audio/webm' });
+      await transcribeAndSend(recordingMode, blob);
+      mediaRecorder = null;
+    };
+
+    mediaRecorder.start();
+    btn.classList.add('recording');
+  } catch (err) {
+    alert('Microphone access nahi mila: ' + err.message);
+  }
+}
+
+function blobToBase64(blob) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => resolve(String(reader.result).split(',')[1] || '');
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
+}
+
+async function transcribeAndSend(mode, blob) {
+  const ta = document.getElementById('input-' + mode + '-ta');
+  const micBtn = document.getElementById('mic-' + mode);
+  if (micBtn) micBtn.classList.add('processing');
+
+  try {
+    const base64 = await blobToBase64(blob);
+    const mime = blob.type || 'audio/webm';
+    const format = mime.split('/')[1]?.split(';')[0] || 'webm';
+
+    const res = await fetch('/api/stt', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ audio: base64, format })
+    });
+    const data = await res.json();
+
+    if (data.text && data.text.trim()) {
+      ta.value = data.text.trim();
+      autoResize(ta);
+      updateCount(mode, ta);
+      sendFromMode(mode);
+    } else {
+      alert(data.error ? 'Voice samajh nahi aayi: ' + data.error : 'Koi awaaz detect nahi hui. Dobara try karein.');
+    }
+  } catch (err) {
+    alert('Transcription error: ' + err.message);
+  } finally {
+    if (micBtn) micBtn.classList.remove('processing');
+  }
+}
+
+function sendFromMode(mode) {
+  if (mode === 'chat') sendChat();
+  else if (mode === 'code') sendCode();
+  else if (mode === 'create') sendCreate();
+  else if (mode === 'research') sendResearch();
+  else if (mode === 'business') sendBusiness();
+}
+
+// ===================== VOICE OUTPUT (Text-to-Speech) =====================
+// Speaker click / Auto Voice -> /api/tts (deepgram/flux-tts:free) -> plays reply out loud.
+
+function stripForSpeech(text) {
+  return (text || '')
+    .replace(/```[\s\S]*?```/g, ' code block ')
+    .replace(/`([^`]+)`/g, '$1')
+    .replace(/^#{1,6}\s+/gm, '')
+    .replace(/\*\*([^*]+)\*\*/g, '$1')
+    .replace(/\*([^*]+)\*/g, '$1')
+    .replace(/^[-*]\s+/gm, '')
+    .replace(/https?:\/\/\S+/g, '')
+    .replace(/[📊🎯⚠️✅💡🔬]/g, '')
+    .trim();
+}
+
+function toggleAutoSpeak() {
+  autoSpeak = !autoSpeak;
+  document.getElementById('autoSpeakBtn').classList.toggle('active', autoSpeak);
+  if (!autoSpeak && currentAudio) { currentAudio.pause(); currentAudio = null; }
+}
+
+async function speakText(text, btn) {
+  if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+  document.querySelectorAll('.speak-btn.speaking').forEach(b => b.classList.remove('speaking'));
+
+  const clean = stripForSpeech(text);
+  if (!clean) return;
+  if (btn) btn.classList.add('speaking');
+
+  try {
+    const res = await fetch('/api/tts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: clean })
+    });
+    const data = await res.json();
+
+    if (data.audio) {
+      const audio = new Audio('data:audio/' + (data.format || 'mp3') + ';base64,' + data.audio);
+      currentAudio = audio;
+      audio.onended = () => { if (btn) btn.classList.remove('speaking'); if (currentAudio === audio) currentAudio = null; };
+      audio.onerror = () => { if (btn) btn.classList.remove('speaking'); };
+      await audio.play();
+    } else {
+      if (btn) btn.classList.remove('speaking');
+      console.error('TTS error:', data.error);
+    }
+  } catch (err) {
+    if (btn) btn.classList.remove('speaking');
+    console.error('TTS error:', err.message);
+  }
 }
 
 async function sendChat() {
