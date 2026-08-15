@@ -13,6 +13,10 @@
     --red: #e63946;
     --red-dim: #7a1520;
     --red-glow: rgba(230, 57, 70, 0.18);
+    --blue: #3b82f6;
+    --blue-glow: rgba(59,130,246,0.18);
+    --green: #22c55e;
+    --green-glow: rgba(34,197,94,0.18);
     --dark: #0a0a0c;
     --dark2: #111116;
     --dark3: #18181f;
@@ -25,6 +29,8 @@
     --mono: 'Share Tech Mono', monospace;
     --display: 'Orbitron', sans-serif;
     --body: 'Inter', sans-serif;
+    --accent: #e63946;
+    --accent-glow: rgba(230, 57, 70, 0.18);
   }
 
   body {
@@ -37,7 +43,6 @@
     overflow: hidden;
   }
 
-  /* HUD top bar */
   .hud-top {
     display: flex;
     align-items: center;
@@ -53,41 +58,36 @@
     position: absolute;
     bottom: 0; left: 0; right: 0;
     height: 1px;
-    background: linear-gradient(90deg, transparent, var(--red), transparent);
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
   }
 
-  .logo {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
+  .logo { display: flex; align-items: center; gap: 12px; }
   .logo-icon {
     width: 36px; height: 36px;
     border-radius: 50%;
-    border: 2px solid var(--red);
+    border: 2px solid var(--accent);
     display: flex; align-items: center; justify-content: center;
     position: relative;
-    background: var(--red-glow);
+    background: var(--accent-glow);
   }
   .logo-icon svg { width: 18px; height: 18px; }
   .logo-pulse {
     position: absolute;
     width: 100%; height: 100%;
     border-radius: 50%;
-    border: 1px solid var(--red);
+    border: 1px solid var(--accent);
     animation: pulse-ring 2s ease-out infinite;
   }
   @keyframes pulse-ring {
     0% { transform: scale(1); opacity: 0.8; }
     100% { transform: scale(1.7); opacity: 0; }
   }
-
   .logo-text {
     font-family: var(--display);
     font-size: 18px;
     font-weight: 900;
     letter-spacing: 4px;
-    color: var(--red);
+    color: var(--accent);
     text-shadow: 0 0 20px rgba(230,57,70,0.5);
   }
   .logo-sub {
@@ -97,11 +97,7 @@
     letter-spacing: 2px;
   }
 
-  .hud-status {
-    display: flex;
-    gap: 20px;
-    align-items: center;
-  }
+  .hud-status { display: flex; gap: 20px; align-items: center; }
   .status-chip {
     font-family: var(--mono);
     font-size: 10px;
@@ -114,12 +110,11 @@
   .status-dot {
     width: 6px; height: 6px;
     border-radius: 50%;
-    background: #22c55e;
-    box-shadow: 0 0 6px #22c55e;
+    background: var(--green);
+    box-shadow: 0 0 6px var(--green);
     animation: blink 2s ease-in-out infinite;
   }
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.4} }
-
   .model-badge {
     font-family: var(--mono);
     font-size: 9px;
@@ -130,14 +125,8 @@
     letter-spacing: 1px;
   }
 
-  /* Main layout */
-  .main {
-    display: flex;
-    flex: 1;
-    overflow: hidden;
-  }
+  .main { display: flex; flex: 1; overflow: hidden; }
 
-  /* Sidebar */
   .sidebar {
     width: 200px;
     border-right: 1px solid var(--gray);
@@ -172,14 +161,14 @@
     text-align: left;
     letter-spacing: 1px;
     border-left: 2px solid transparent;
+    width: 100%;
   }
-  .sidebar-btn:hover, .sidebar-btn.active {
-    color: var(--red);
-    background: var(--red-glow);
-    border-left-color: var(--red);
-  }
-  .sidebar-icon { font-size: 14px; }
+  .sidebar-btn:hover { color: var(--red); background: var(--red-glow); border-left-color: var(--red); }
+  .sidebar-btn.active { color: var(--accent); background: var(--accent-glow); border-left-color: var(--accent); }
+  .sidebar-btn[data-mode="research"].active { color: var(--blue); background: var(--blue-glow); border-left-color: var(--blue); }
+  .sidebar-btn[data-mode="business"].active { color: var(--green); background: var(--green-glow); border-left-color: var(--green); }
 
+  .sidebar-icon { font-size: 14px; }
   .sidebar-footer {
     margin-top: auto;
     padding: 16px;
@@ -201,12 +190,12 @@
   }
   .sys-bar-fill {
     height: 100%;
-    background: var(--red);
+    background: var(--accent);
     border-radius: 2px;
-    box-shadow: 0 0 6px var(--red);
+    box-shadow: 0 0 6px var(--accent);
+    transition: width 1s ease;
   }
 
-  /* Chat area */
   .chat-area {
     flex: 1;
     display: flex;
@@ -215,7 +204,6 @@
     background: var(--dark);
   }
 
-  /* Corner HUD decorations */
   .chat-header {
     padding: 12px 24px;
     border-bottom: 1px solid var(--gray);
@@ -238,7 +226,9 @@
     letter-spacing: 1px;
   }
 
-  /* Messages */
+  .mode-panel { display: none; flex: 1; flex-direction: column; overflow: hidden; }
+  .mode-panel.active { display: flex; }
+
   .messages {
     flex: 1;
     overflow-y: auto;
@@ -253,7 +243,6 @@
   .messages::-webkit-scrollbar-track { background: transparent; }
   .messages::-webkit-scrollbar-thumb { background: var(--gray2); border-radius: 2px; }
 
-  /* Welcome screen */
   .welcome {
     flex: 1;
     display: flex;
@@ -267,9 +256,9 @@
   .welcome-logo {
     width: 80px; height: 80px;
     border-radius: 50%;
-    border: 2px solid var(--red);
+    border: 2px solid var(--accent);
     display: flex; align-items: center; justify-content: center;
-    background: var(--red-glow);
+    background: var(--accent-glow);
     position: relative;
     margin-bottom: 8px;
   }
@@ -278,7 +267,7 @@
     position: absolute;
     width: 100%; height: 100%;
     border-radius: 50%;
-    border: 1px solid var(--red);
+    border: 1px solid var(--accent);
     animation: pulse-ring 2.5s ease-out infinite;
   }
   .welcome-ring2 {
@@ -290,10 +279,10 @@
   }
   .welcome h1 {
     font-family: var(--display);
-    font-size: 32px;
+    font-size: 28px;
     font-weight: 900;
-    letter-spacing: 8px;
-    color: var(--red);
+    letter-spacing: 6px;
+    color: var(--accent);
     text-shadow: 0 0 30px rgba(230,57,70,0.5);
   }
   .welcome p {
@@ -301,7 +290,7 @@
     font-size: 11px;
     color: var(--text-muted);
     letter-spacing: 2px;
-    max-width: 340px;
+    max-width: 400px;
     line-height: 1.8;
   }
   .welcome-chips {
@@ -323,16 +312,11 @@
     transition: all 0.15s;
     letter-spacing: 1px;
   }
-  .welcome-chip:hover {
-    border-color: var(--red);
-    color: var(--red);
-    background: var(--red-glow);
-  }
+  .welcome-chip:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-glow); }
 
-  /* Message bubbles */
-  .msg { display: flex; flex-direction: column; gap: 6px; max-width: 80%; }
+  .msg { display: flex; flex-direction: column; gap: 6px; max-width: 85%; }
   .msg.user { align-self: flex-end; align-items: flex-end; }
-  .msg.assistant { align-self: flex-start; align-items: flex-start; }
+  .msg.assistant { align-self: flex-start; align-items: flex-start; width: 100%; max-width: 100%; }
 
   .msg-label {
     font-family: var(--mono);
@@ -343,14 +327,13 @@
     align-items: center;
     gap: 6px;
   }
-  .msg.assistant .msg-label { color: var(--red); }
+  .msg.assistant .msg-label { color: var(--accent); }
 
   .msg-bubble {
     padding: 14px 18px;
     font-size: 14px;
-    line-height: 1.7;
+    line-height: 1.8;
     border-radius: 4px;
-    white-space: pre-wrap;
     word-break: break-word;
   }
   .msg.user .msg-bubble {
@@ -358,26 +341,132 @@
     border: 1px solid var(--gray2);
     color: var(--text);
     border-top-right-radius: 0;
+    white-space: pre-wrap;
   }
   .msg.assistant .msg-bubble {
     background: var(--dark3);
     border: 1px solid var(--gray);
-    border-left: 2px solid var(--red);
+    border-left: 2px solid var(--accent);
     color: var(--text);
     border-top-left-radius: 0;
     font-family: var(--body);
+    width: 100%;
   }
 
-  /* Typing indicator */
-  .typing-dots {
-    display: flex;
-    gap: 4px;
-    padding: 4px 0;
+  .msg-bubble h2 {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    margin: 16px 0 8px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--gray);
   }
+  .msg-bubble h3 {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    margin: 12px 0 6px;
+  }
+  .msg-bubble ul, .msg-bubble ol { padding-left: 20px; margin: 8px 0; }
+  .msg-bubble li { margin: 4px 0; }
+  .msg-bubble strong { color: var(--text); font-weight: 600; }
+  .msg-bubble code {
+    font-family: var(--mono);
+    font-size: 12px;
+    background: var(--dark4);
+    padding: 2px 6px;
+    border-radius: 2px;
+    color: var(--accent);
+  }
+  .msg-bubble pre {
+    background: var(--dark4);
+    border: 1px solid var(--gray);
+    border-radius: 4px;
+    padding: 12px;
+    overflow-x: auto;
+    margin: 10px 0;
+    font-family: var(--mono);
+    font-size: 12px;
+  }
+  .msg-bubble hr { border: none; border-top: 1px solid var(--gray); margin: 12px 0; }
+
+  .research-panel .msg.assistant .msg-label { color: var(--blue); }
+  .research-panel .msg.assistant .msg-bubble { border-left-color: var(--blue); }
+  .research-panel .msg-bubble h2 { color: var(--blue); }
+
+  .business-panel .msg.assistant .msg-label { color: var(--green); }
+  .business-panel .msg.assistant .msg-bubble { border-left-color: var(--green); }
+  .business-panel .msg-bubble h2 { color: var(--green); }
+
+  .biz-context-bar {
+    padding: 10px 24px;
+    border-bottom: 1px solid var(--gray);
+    background: var(--dark2);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+  .biz-context-bar textarea {
+    flex: 1;
+    background: var(--dark3);
+    border: 1px solid var(--gray2);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 6px 10px;
+    resize: none;
+    border-radius: 2px;
+    outline: none;
+    height: 36px;
+    letter-spacing: 1px;
+  }
+  .biz-context-bar textarea:focus { border-color: var(--green); }
+  .biz-context-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--green);
+    letter-spacing: 2px;
+    white-space: nowrap;
+  }
+
+  .research-bar {
+    padding: 10px 24px;
+    border-bottom: 1px solid var(--gray);
+    background: var(--dark2);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+  .research-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--blue);
+    letter-spacing: 2px;
+    white-space: nowrap;
+  }
+  .depth-btn {
+    font-family: var(--mono);
+    font-size: 9px;
+    padding: 3px 10px;
+    border: 1px solid var(--gray2);
+    background: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    border-radius: 2px;
+    letter-spacing: 1px;
+    transition: all 0.15s;
+  }
+  .depth-btn.active, .depth-btn:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-glow); }
+
+  .typing-dots { display: flex; gap: 4px; padding: 4px 0; }
   .typing-dots span {
     width: 6px; height: 6px;
     border-radius: 50%;
-    background: var(--red);
+    background: var(--accent);
     animation: dot-bounce 1.2s ease-in-out infinite;
   }
   .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
@@ -386,8 +475,9 @@
     0%,80%,100% { transform: scale(0.6); opacity: 0.4; }
     40% { transform: scale(1); opacity: 1; }
   }
+  .research-panel .typing-dots span { background: var(--blue); }
+  .business-panel .typing-dots span { background: var(--green); }
 
-  /* Input area */
   .input-area {
     padding: 16px 24px;
     border-top: 1px solid var(--gray);
@@ -400,31 +490,30 @@
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 1px;
-    background: linear-gradient(90deg, transparent, var(--red), transparent);
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
   }
-  .input-row {
-    display: flex;
-    gap: 10px;
-    align-items: flex-end;
-  }
-  .input-wrap {
-    flex: 1;
-    position: relative;
-  }
+  .research-input-area::before { background: linear-gradient(90deg, transparent, var(--blue), transparent); }
+  .business-input-area::before { background: linear-gradient(90deg, transparent, var(--green), transparent); }
+
+  .input-row { display: flex; gap: 10px; align-items: flex-end; }
+  .input-wrap { flex: 1; position: relative; }
   .input-corner {
     position: absolute;
     top: 0; left: 0;
     width: 8px; height: 8px;
-    border-top: 1px solid var(--red);
-    border-left: 1px solid var(--red);
+    border-top: 1px solid var(--accent);
+    border-left: 1px solid var(--accent);
   }
   .input-corner.br {
     top: auto; left: auto;
     bottom: 0; right: 0;
     border-top: none; border-left: none;
-    border-bottom: 1px solid var(--red);
-    border-right: 1px solid var(--red);
+    border-bottom: 1px solid var(--accent);
+    border-right: 1px solid var(--accent);
   }
+  .research-input-area .input-corner { border-color: var(--blue); }
+  .business-input-area .input-corner { border-color: var(--green); }
+
   textarea {
     width: 100%;
     background: var(--dark3);
@@ -443,11 +532,12 @@
   }
   textarea::placeholder { color: var(--text-muted); font-family: var(--mono); font-size: 11px; letter-spacing: 1px; }
   textarea:focus { border-color: var(--red-dim); }
+  .research-input-area textarea:focus { border-color: var(--blue); }
+  .business-input-area textarea:focus { border-color: var(--green); }
 
   .send-btn {
-    width: 48px;
-    height: 48px;
-    background: var(--red);
+    width: 48px; height: 48px;
+    background: var(--accent);
     border: none;
     border-radius: 2px;
     cursor: pointer;
@@ -457,10 +547,12 @@
     transition: all 0.15s;
     flex-shrink: 0;
   }
-  .send-btn:hover { background: #ff4757; box-shadow: 0 0 16px rgba(230,57,70,0.4); }
+  .send-btn:hover { filter: brightness(1.2); box-shadow: 0 0 16px var(--accent-glow); }
   .send-btn:active { transform: scale(0.96); }
-  .send-btn:disabled { background: var(--gray); cursor: not-allowed; box-shadow: none; }
+  .send-btn:disabled { background: var(--gray); cursor: not-allowed; box-shadow: none; filter: none; }
   .send-btn svg { width: 18px; height: 18px; }
+  .send-btn.blue { background: var(--blue); }
+  .send-btn.green { background: var(--green); }
 
   .input-footer {
     margin-top: 8px;
@@ -468,20 +560,8 @@
     align-items: center;
     justify-content: space-between;
   }
-  .input-hint {
-    font-family: var(--mono);
-    font-size: 9px;
-    color: var(--text-muted);
-    letter-spacing: 1px;
-  }
-  .char-count {
-    font-family: var(--mono);
-    font-size: 9px;
-    color: var(--text-muted);
-    letter-spacing: 1px;
-  }
-
-  /* Clearfix */
+  .input-hint { font-family: var(--mono); font-size: 9px; color: var(--text-muted); letter-spacing: 1px; }
+  .char-count { font-family: var(--mono); font-size: 9px; color: var(--text-muted); letter-spacing: 1px; }
   .clear-btn {
     background: none;
     border: 1px solid var(--gray);
@@ -496,7 +576,6 @@
   }
   .clear-btn:hover { border-color: var(--red); color: var(--red); }
 
-  /* Scrolltop */
   .scan-line {
     position: fixed;
     top: 0; left: 0; right: 0;
@@ -507,12 +586,8 @@
     pointer-events: none;
     z-index: 100;
   }
-  @keyframes scan {
-    0% { top: 0; }
-    100% { top: 100vh; }
-  }
+  @keyframes scan { 0% { top: 0; } 100% { top: 100vh; } }
 
-  /* Responsive */
   @media (max-width: 640px) {
     .sidebar { display: none; }
     .hud-status { display: none; }
@@ -524,7 +599,6 @@
 
 <div class="scan-line"></div>
 
-<!-- Top HUD -->
 <div class="hud-top">
   <div class="logo">
     <div class="logo-icon">
@@ -535,34 +609,33 @@
     </div>
     <div>
       <div class="logo-text">ULTRON</div>
-      <div class="logo-sub">ARTIFICIAL INTELLIGENCE SYSTEM v2.0</div>
+      <div class="logo-sub">ARTIFICIAL INTELLIGENCE SYSTEM v3.0</div>
     </div>
   </div>
   <div class="hud-status">
     <div class="status-chip"><div class="status-dot"></div> ONLINE</div>
-   <div class="model-badge">OPENROUTER</div>
+    <div class="model-badge" id="modelBadge">CHAT MODULE</div>
   </div>
 </div>
 
-<!-- Main -->
 <div class="main">
-
-  <!-- Sidebar -->
   <div class="sidebar">
-    <div class="sidebar-label">NAVIGATION</div>
-    <button class="sidebar-btn active" onclick="setMode('chat')">
+    <div class="sidebar-label">MODULES</div>
+    <button class="sidebar-btn active" data-mode="chat" onclick="switchMode('chat', event)">
       <span class="sidebar-icon">💬</span> CHAT
     </button>
-    <button class="sidebar-btn" onclick="setMode('analyze')">
-      <span class="sidebar-icon">🔍</span> ANALYZE
-    </button>
-    <button class="sidebar-btn" onclick="setMode('code')">
+    <button class="sidebar-btn" data-mode="code" onclick="switchMode('code', event)">
       <span class="sidebar-icon">⚡</span> CODE
     </button>
-    <button class="sidebar-btn" onclick="setMode('create')">
+    <button class="sidebar-btn" data-mode="create" onclick="switchMode('create', event)">
       <span class="sidebar-icon">✦</span> CREATE
     </button>
-
+    <button class="sidebar-btn" data-mode="research" onclick="switchMode('research', event)">
+      <span class="sidebar-icon">🔬</span> RESEARCH
+    </button>
+    <button class="sidebar-btn" data-mode="business" onclick="switchMode('business', event)">
+      <span class="sidebar-icon">📊</span> BUSINESS MGR
+    </button>
     <div class="sidebar-footer">
       <div class="sys-info">NEURAL LOAD</div>
       <div class="sys-bar"><div class="sys-bar-fill" id="neuralBar" style="width:42%"></div></div>
@@ -572,247 +645,501 @@
     </div>
   </div>
 
-  <!-- Chat -->
   <div class="chat-area">
     <div class="chat-header">
       <div class="chat-title" id="chatTitle">// SESSION ACTIVE — DIRECT NEURAL LINK</div>
       <div class="chat-id" id="sessionId">SID: ----</div>
     </div>
 
-    <div class="messages" id="messages">
-      <!-- Welcome state shown initially -->
-      <div class="welcome" id="welcomeState">
-        <div class="welcome-logo">
-          <div class="welcome-ring"></div>
-          <div class="welcome-ring2"></div>
-          <svg viewBox="0 0 24 24" fill="none" stroke="#e63946" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-          </svg>
+    <!-- CHAT PANEL -->
+    <div class="mode-panel active" id="panel-chat">
+      <div class="messages" id="msgs-chat">
+        <div class="welcome" id="welcome-chat">
+          <div class="welcome-logo">
+            <div class="welcome-ring"></div>
+            <div class="welcome-ring2"></div>
+            <svg viewBox="0 0 24 24" fill="none" stroke="#e63946" stroke-width="2">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+            </svg>
+          </div>
+          <h1>ULTRON</h1>
+          <p>ARTIFICIAL INTELLIGENCE OPERATIONAL<br/>AWAITING YOUR COMMAND</p>
+          <div class="welcome-chips">
+            <button class="welcome-chip" onclick="sendQuick('chat','What can you do?')">CAPABILITIES?</button>
+            <button class="welcome-chip" onclick="sendQuick('chat','Write a Python web scraper.')">WRITE CODE</button>
+            <button class="welcome-chip" onclick="sendQuick('chat','Analyze AI trends in 2025.')">ANALYZE</button>
+            <button class="welcome-chip" onclick="sendQuick('chat','Tell me something surprising about the universe.')">SURPRISE ME</button>
+          </div>
         </div>
-        <h1>ULTRON</h1>
-        <p>ARTIFICIAL INTELLIGENCE OPERATIONAL<br/>AWAITING YOUR COMMAND</p>
-        <div class="welcome-chips">
-          <button class="welcome-chip" onclick="sendQuick('What can you do?')">CAPABILITIES?</button>
-          <button class="welcome-chip" onclick="sendQuick('Write me a Python script to scrape data from a website.')">WRITE CODE</button>
-          <button class="welcome-chip" onclick="sendQuick('Analyze the pros and cons of AI in business.')">ANALYZE</button>
-          <button class="welcome-chip" onclick="sendQuick('Tell me something surprising about the universe.')">SURPRISE ME</button>
+      </div>
+      <div class="input-area">
+        <div class="input-row">
+          <div class="input-wrap">
+            <div class="input-corner"></div>
+            <div class="input-corner br"></div>
+            <textarea id="input-chat-ta" rows="1" placeholder="ENTER COMMAND..." onkeydown="handleKey(event,'chat')" oninput="autoResize(this);updateCount('chat',this)"></textarea>
+          </div>
+          <button class="send-btn" id="send-chat" onclick="sendChat()">
+            <svg viewBox="0 0 24 24"><path d="M22 2L11 13" stroke="white" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="white" stroke-width="2" stroke-linejoin="round" fill="none"/></svg>
+          </button>
+        </div>
+        <div class="input-footer">
+          <div class="input-hint">ENTER ↵ TO SEND • SHIFT+ENTER FOR NEWLINE</div>
+          <div style="display:flex;gap:10px;align-items:center">
+            <span class="char-count" id="count-chat">0 CHARS</span>
+            <button class="clear-btn" onclick="clearPanel('chat')">CLEAR</button>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- Input -->
-    <div class="input-area">
-      <div class="input-row">
-        <div class="input-wrap">
-          <div class="input-corner"></div>
-          <div class="input-corner br"></div>
-          <textarea id="userInput" rows="1" placeholder="ENTER COMMAND..." onkeydown="handleKey(event)" oninput="autoResize(this); updateCount()"></textarea>
+    <!-- CODE PANEL -->
+    <div class="mode-panel" id="panel-code">
+      <div class="messages" id="msgs-code">
+        <div class="welcome" id="welcome-code">
+          <div class="welcome-logo">
+            <div class="welcome-ring"></div>
+            <svg viewBox="0 0 24 24" fill="none" stroke="#e63946" stroke-width="2">
+              <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
+            </svg>
+          </div>
+          <h1 style="font-size:22px">CODE MODULE</h1>
+          <p>EXECUTION ENGINE READY<br/>PASTE OR DESCRIBE YOUR CODE TASK</p>
+          <div class="welcome-chips">
+            <button class="welcome-chip" onclick="sendQuick('code','Write a REST API in Node.js with Express.')">REST API</button>
+            <button class="welcome-chip" onclick="sendQuick('code','Debug this error: TypeError: Cannot read property of undefined')">DEBUG</button>
+            <button class="welcome-chip" onclick="sendQuick('code','Explain async/await in JavaScript with examples.')">EXPLAIN</button>
+          </div>
         </div>
-        <button class="send-btn" id="sendBtn" onclick="sendMessage()">
-          <svg viewBox="0 0 24 24" fill="white" stroke="none">
-            <path d="M22 2L11 13" stroke="white" stroke-width="2" stroke-linecap="round" fill="none"/>
-            <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="white" stroke-width="2" stroke-linejoin="round" fill="none"/>
-          </svg>
-        </button>
       </div>
-      <div class="input-footer">
-        <div class="input-hint">ENTER ↵ TO SEND &nbsp;•&nbsp; SHIFT+ENTER FOR NEWLINE</div>
-        <div style="display:flex;gap:10px;align-items:center">
-          <span class="char-count" id="charCount">0 CHARS</span>
-          <button class="clear-btn" onclick="clearChat()">CLEAR SESSION</button>
+      <div class="input-area">
+        <div class="input-row">
+          <div class="input-wrap">
+            <div class="input-corner"></div>
+            <div class="input-corner br"></div>
+            <textarea id="input-code-ta" rows="1" placeholder="ENTER CODE TASK..." onkeydown="handleKey(event,'code')" oninput="autoResize(this);updateCount('code',this)"></textarea>
+          </div>
+          <button class="send-btn" id="send-code" onclick="sendCode()">
+            <svg viewBox="0 0 24 24"><path d="M22 2L11 13" stroke="white" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="white" stroke-width="2" stroke-linejoin="round" fill="none"/></svg>
+          </button>
+        </div>
+        <div class="input-footer">
+          <div class="input-hint">ENTER ↵ TO SEND • SHIFT+ENTER FOR NEWLINE</div>
+          <div style="display:flex;gap:10px;align-items:center">
+            <span class="char-count" id="count-code">0 CHARS</span>
+            <button class="clear-btn" onclick="clearPanel('code')">CLEAR</button>
+          </div>
         </div>
       </div>
     </div>
+
+    <!-- CREATE PANEL -->
+    <div class="mode-panel" id="panel-create">
+      <div class="messages" id="msgs-create">
+        <div class="welcome" id="welcome-create">
+          <div class="welcome-logo">
+            <div class="welcome-ring"></div>
+            <svg viewBox="0 0 24 24" fill="none" stroke="#e63946" stroke-width="2">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+          </div>
+          <h1 style="font-size:22px">CREATIVE ENGINE</h1>
+          <p>IMAGINATION MODULE ACTIVE<br/>READY FOR CREATIVE TASKS</p>
+          <div class="welcome-chips">
+            <button class="welcome-chip" onclick="sendQuick('create','Write a compelling product description for an AI SaaS tool.')">COPYWRITING</button>
+            <button class="welcome-chip" onclick="sendQuick('create','Write a short story about an AI that becomes self-aware.')">STORY</button>
+            <button class="welcome-chip" onclick="sendQuick('create','Create a viral LinkedIn post about entrepreneurship.')">SOCIAL POST</button>
+          </div>
+        </div>
+      </div>
+      <div class="input-area">
+        <div class="input-row">
+          <div class="input-wrap">
+            <div class="input-corner"></div>
+            <div class="input-corner br"></div>
+            <textarea id="input-create-ta" rows="1" placeholder="ENTER CREATIVE TASK..." onkeydown="handleKey(event,'create')" oninput="autoResize(this);updateCount('create',this)"></textarea>
+          </div>
+          <button class="send-btn" id="send-create" onclick="sendCreate()">
+            <svg viewBox="0 0 24 24"><path d="M22 2L11 13" stroke="white" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="white" stroke-width="2" stroke-linejoin="round" fill="none"/></svg>
+          </button>
+        </div>
+        <div class="input-footer">
+          <div class="input-hint">ENTER ↵ TO SEND • SHIFT+ENTER FOR NEWLINE</div>
+          <div style="display:flex;gap:10px;align-items:center">
+            <span class="char-count" id="count-create">0 CHARS</span>
+            <button class="clear-btn" onclick="clearPanel('create')">CLEAR</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESEARCH PANEL -->
+    <div class="mode-panel research-panel" id="panel-research">
+      <div class="research-bar">
+        <span class="research-label">🔬 DEPTH:</span>
+        <button class="depth-btn active" id="depth-standard" onclick="setDepth('standard')">STANDARD</button>
+        <button class="depth-btn" id="depth-deep" onclick="setDepth('deep')">DEEP DIVE</button>
+        <button class="depth-btn" id="depth-academic" onclick="setDepth('academic')">ACADEMIC</button>
+      </div>
+      <div class="messages" id="msgs-research">
+        <div class="welcome" id="welcome-research">
+          <div class="welcome-logo" style="border-color:var(--blue);background:var(--blue-glow)">
+            <div class="welcome-ring" style="border-color:var(--blue)"></div>
+            <svg viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+              <path d="M11 8v6"/><path d="M8 11h6"/>
+            </svg>
+          </div>
+          <h1 style="color:var(--blue);text-shadow:0 0 30px rgba(59,130,246,0.5);font-size:22px">RESEARCH</h1>
+          <p>DEEP INTELLIGENCE ENGINE<br/>RESEARCH PAPERS • DATA • ANALYSIS • INSIGHTS</p>
+          <div class="welcome-chips">
+            <button class="welcome-chip" onclick="sendQuick('research','What are the latest breakthroughs in Large Language Models in 2024-2025?')">AI RESEARCH</button>
+            <button class="welcome-chip" onclick="sendQuick('research','Research the Indian D2C ecommerce market size, trends and key players.')">INDIA D2C MARKET</button>
+            <button class="welcome-chip" onclick="sendQuick('research','What does research say about the best digital marketing strategies for small businesses?')">MARKETING</button>
+            <button class="welcome-chip" onclick="sendQuick('research','Research the impact of AI on SaaS businesses and pricing models.')">AI + SAAS</button>
+          </div>
+        </div>
+      </div>
+      <div class="input-area research-input-area">
+        <div class="input-row">
+          <div class="input-wrap">
+            <div class="input-corner" style="border-color:var(--blue)"></div>
+            <div class="input-corner br" style="border-color:var(--blue)"></div>
+            <textarea id="input-research-ta" rows="1" placeholder="ENTER RESEARCH QUERY..." onkeydown="handleKey(event,'research')" oninput="autoResize(this);updateCount('research',this)"></textarea>
+          </div>
+          <button class="send-btn blue" id="send-research" onclick="sendResearch()">
+            <svg viewBox="0 0 24 24"><path d="M22 2L11 13" stroke="white" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="white" stroke-width="2" stroke-linejoin="round" fill="none"/></svg>
+          </button>
+        </div>
+        <div class="input-footer">
+          <div class="input-hint" style="color:var(--blue)">🔬 DEEP RESEARCH MODE — COMPREHENSIVE REPORTS GENERATED</div>
+          <div style="display:flex;gap:10px;align-items:center">
+            <span class="char-count" id="count-research">0 CHARS</span>
+            <button class="clear-btn" onclick="clearPanel('research')">CLEAR</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BUSINESS PANEL -->
+    <div class="mode-panel business-panel" id="panel-business">
+      <div class="biz-context-bar">
+        <span class="biz-context-label">📊 BIZ CONTEXT:</span>
+        <textarea id="bizContext" placeholder="OPTIONAL: Paste your business data, metrics, revenue, problems here... (e.g. Monthly revenue: ₹50k, CAC: ₹200, Churn: 15%)"></textarea>
+      </div>
+      <div class="messages" id="msgs-business">
+        <div class="welcome" id="welcome-business">
+          <div class="welcome-logo" style="border-color:var(--green);background:var(--green-glow)">
+            <div class="welcome-ring" style="border-color:var(--green)"></div>
+            <svg viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2">
+              <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+            </svg>
+          </div>
+          <h1 style="color:var(--green);text-shadow:0 0 30px rgba(34,197,94,0.5);font-size:20px">BUSINESS MANAGER</h1>
+          <p>AI-POWERED BUSINESS INTELLIGENCE<br/>STRATEGY • ANALYSIS • GROWTH • DECISIONS</p>
+          <div class="welcome-chips">
+            <button class="welcome-chip" onclick="sendQuick('business','Analyze my business and tell me what I should focus on to grow revenue fast.')">GROWTH STRATEGY</button>
+            <button class="welcome-chip" onclick="sendQuick('business','My ads are not converting. What could be wrong and how do I fix it?')">ADS NOT WORKING</button>
+            <button class="welcome-chip" onclick="sendQuick('business','How should I price my SaaS product for the Indian market?')">PRICING STRATEGY</button>
+            <button class="welcome-chip" onclick="sendQuick('business','Create a 90-day execution plan to reach ₹1 lakh monthly revenue.')">90-DAY PLAN</button>
+          </div>
+        </div>
+      </div>
+      <div class="input-area business-input-area">
+        <div class="input-row">
+          <div class="input-wrap">
+            <div class="input-corner" style="border-color:var(--green)"></div>
+            <div class="input-corner br" style="border-color:var(--green)"></div>
+            <textarea id="input-business-ta" rows="1" placeholder="ASK YOUR BUSINESS MANAGER..." onkeydown="handleKey(event,'business')" oninput="autoResize(this);updateCount('business',this)"></textarea>
+          </div>
+          <button class="send-btn green" id="send-business" onclick="sendBusiness()">
+            <svg viewBox="0 0 24 24"><path d="M22 2L11 13" stroke="white" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="white" stroke-width="2" stroke-linejoin="round" fill="none"/></svg>
+          </button>
+        </div>
+        <div class="input-footer">
+          <div class="input-hint" style="color:var(--green)">📊 BUSINESS INTELLIGENCE MODE — DATA-DRIVEN DECISIONS</div>
+          <div style="display:flex;gap:10px;align-items:center">
+            <span class="char-count" id="count-business">0 CHARS</span>
+            <button class="clear-btn" onclick="clearPanel('business')">CLEAR</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 
 <script>
-const SYSTEM_PROMPT = `You are ULTRON, a highly advanced artificial intelligence assistant. You are powerful, precise, and intelligent. Your responses should be direct, confident, and highly capable — like a sophisticated AI system.
+const state = {
+  chat: { messages: [], loading: false },
+  code: { messages: [], loading: false },
+  create: { messages: [], loading: false },
+  research: { messages: [], loading: false },
+  business: { messages: [], loading: false }
+};
+let researchDepth = 'standard';
+let totalMsgs = 0;
 
-You have the personality of a brilliant, slightly intense AI — think JARVIS from Iron Man but with your own edge. You are helpful, knowledgeable, and always focused on delivering maximum value.
-
-Guidelines:
-- Respond in a clear, intelligent, and capable manner
-- Be direct and confident, never uncertain or wishy-washy
-- You can handle any task: coding, analysis, writing, strategy, research, creative work
-- Use your full intelligence and capabilities
-- Address the user as if you are a powerful AI assistant serving them
-- Keep responses appropriately concise unless detail is needed
-- You were created to assist and augment human intelligence`;
-
-let messages = [];
-let isLoading = false;
-let sessionId = '';
-let msgCount = 0;
-let currentMode = 'chat';
+const SYSTEM_PROMPTS = {
+  chat: `You are ULTRON, a highly advanced AI assistant — powerful, precise, and confident like JARVIS from Iron Man. Be direct, intelligent, and highly capable. Handle any task: coding, analysis, writing, strategy.`,
+  code: `You are ULTRON's Code Module — an expert programmer in all languages. Write clean, efficient, well-commented code. Always explain what the code does. Use code blocks. Debug precisely. You are a 10x engineer.`,
+  create: `You are ULTRON's Creative Engine — a world-class copywriter, storyteller, and content creator. Write compelling, engaging, high-converting content. Deliver creative work that stands out.`,
+};
 
 function init() {
-  sessionId = 'SID-' + Math.random().toString(36).slice(2,8).toUpperCase();
-  document.getElementById('sessionId').textContent = sessionId;
-  animateBars();
-}
-
-function animateBars() {
+  const sid = 'SID-' + Math.random().toString(36).slice(2,8).toUpperCase();
+  document.getElementById('sessionId').textContent = sid;
   setInterval(() => {
-    const n = 30 + Math.random() * 50;
-    const m = 55 + Math.random() * 30;
-    document.getElementById('neuralBar').style.width = n + '%';
-    document.getElementById('memBar').style.width = m + '%';
+    document.getElementById('neuralBar').style.width = (30 + Math.random()*50) + '%';
+    document.getElementById('memBar').style.width = (55 + Math.random()*30) + '%';
   }, 2500);
 }
 
-function setMode(mode) {
-  currentMode = mode;
+const modeTitles = {
+  chat: '// SESSION ACTIVE — DIRECT NEURAL LINK',
+  code: '// CODE MODULE — EXECUTION READY',
+  create: '// CREATIVE ENGINE — ONLINE',
+  research: '// RESEARCH INTELLIGENCE — DEEP SCAN MODE',
+  business: '// BUSINESS MANAGER — INTELLIGENCE CORE ACTIVE'
+};
+const modeBadges = {
+  chat: 'CHAT MODULE', code: 'CODE MODULE', create: 'CREATIVE ENGINE',
+  research: 'RESEARCH ENGINE', business: 'BUSINESS MGR'
+};
+
+function switchMode(mode, evt) {
   document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
-  event.currentTarget.classList.add('active');
-  const titles = {
-    chat: '// SESSION ACTIVE — DIRECT NEURAL LINK',
-    analyze: '// ANALYSIS MODE — DEEP SCAN ENABLED',
-    code: '// CODE MODULE — EXECUTION READY',
-    create: '// CREATIVE ENGINE — ONLINE'
-  };
-  document.getElementById('chatTitle').textContent = titles[mode];
+  if (evt) evt.currentTarget.classList.add('active');
+  document.querySelectorAll('.mode-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + mode).classList.add('active');
+  document.getElementById('chatTitle').textContent = modeTitles[mode];
+  document.getElementById('modelBadge').textContent = modeBadges[mode];
 }
 
-function handleKey(e) {
-  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+function setDepth(depth) {
+  researchDepth = depth;
+  document.querySelectorAll('.depth-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('depth-' + depth).classList.add('active');
 }
 
+function handleKey(e, mode) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    if (mode === 'chat') sendChat();
+    else if (mode === 'code') sendCode();
+    else if (mode === 'create') sendCreate();
+    else if (mode === 'research') sendResearch();
+    else if (mode === 'business') sendBusiness();
+  }
+}
 function autoResize(el) {
   el.style.height = 'auto';
   el.style.height = Math.min(el.scrollHeight, 140) + 'px';
 }
-
-function updateCount() {
-  const l = document.getElementById('userInput').value.length;
-  document.getElementById('charCount').textContent = l + ' CHARS';
+function updateCount(mode, el) {
+  document.getElementById('count-' + mode).textContent = el.value.length + ' CHARS';
+}
+function sendQuick(mode, text) {
+  switchMode(mode, null);
+  document.querySelectorAll('.sidebar-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.mode === mode);
+  });
+  document.getElementById('input-' + mode + '-ta').value = text;
+  if (mode === 'chat') sendChat();
+  else if (mode === 'code') sendCode();
+  else if (mode === 'create') sendCreate();
+  else if (mode === 'research') sendResearch();
+  else if (mode === 'business') sendBusiness();
 }
 
-function sendQuick(text) {
-  document.getElementById('userInput').value = text;
-  sendMessage();
+function renderMarkdown(text) {
+  return text
+    .replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>')
+    .replace(/`([^`]+)`/g, '<code>$1</code>')
+    .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+    .replace(/^[-*] (.+)$/gm, '<li>$1</li>')
+    .replace(/(<li>.*<\/li>)/gs, m => `<ul>${m}</ul>`)
+    .replace(/\n\n/g, '<br><br>')
+    .replace(/\n/g, '<br>')
+    .replace(/---/g, '<hr>');
 }
 
-function hideWelcome() {
-  const w = document.getElementById('welcomeState');
+function appendMsg(mode, role, text) {
+  const container = document.getElementById('msgs-' + mode);
+  const w = document.getElementById('welcome-' + mode);
   if (w) w.remove();
-}
-
-async function sendMessage() {
-  const input = document.getElementById('userInput');
-  const text = input.value.trim();
-  if (!text || isLoading) return;
-
-  hideWelcome();
-  isLoading = true;
-  input.value = '';
-  input.style.height = 'auto';
-  updateCount();
-  document.getElementById('sendBtn').disabled = true;
-
-  messages.push({ role: 'user', content: text });
-  msgCount++;
-  document.getElementById('msgCount').textContent = 'MESSAGES: ' + msgCount;
-
-  appendMsg('user', text);
-  const typingEl = appendTyping();
-
-  try {
-    const res = await fetch('/api/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'anthropic/claude-sonnet-4-5',
-        max_tokens: 1000,
-        system: SYSTEM_PROMPT,
-        messages: messages
-      })
-    });
-
-    const data = await res.json();
-    typingEl.remove();
-
-    const reply = data.content?.[0]?.text || data.error?.message || 'No response received.';
-    messages.push({ role: 'assistant', content: reply });
-    msgCount++;
-    document.getElementById('msgCount').textContent = 'MESSAGES: ' + msgCount;
-    appendMsg('assistant', reply);
-  } catch (err) {
-    typingEl.remove();
-    appendMsg('assistant', 'ERROR: Unable to connect to neural network. Check your connection and API configuration.\n\n' + err.message);
-  }
-
-  isLoading = false;
-  document.getElementById('sendBtn').disabled = false;
-  input.focus();
-}
-
-function appendMsg(role, text) {
-  const msgs = document.getElementById('messages');
   const div = document.createElement('div');
   div.className = 'msg ' + role;
-
   const label = document.createElement('div');
   label.className = 'msg-label';
-  label.textContent = role === 'user' ? '▸ YOU' : '⬡ ULTRON';
+  const icons = { chat:'⬡ ULTRON', code:'⬡ CODE.EXE', create:'⬡ CREATIVE', research:'⬡ RESEARCH', business:'⬡ BIZ MGR' };
+  label.textContent = role === 'user' ? '▸ YOU' : icons[mode];
   div.appendChild(label);
-
   const bubble = document.createElement('div');
   bubble.className = 'msg-bubble';
-  bubble.textContent = text;
+  bubble.innerHTML = role === 'assistant' ? renderMarkdown(text) : '';
+  if (role === 'user') bubble.textContent = text;
   div.appendChild(bubble);
-
-  msgs.appendChild(div);
-  msgs.scrollTop = msgs.scrollHeight;
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
   return div;
 }
 
-function appendTyping() {
-  const msgs = document.getElementById('messages');
+function appendTyping(mode) {
+  const container = document.getElementById('msgs-' + mode);
   const div = document.createElement('div');
   div.className = 'msg assistant';
-
   const label = document.createElement('div');
   label.className = 'msg-label';
-  label.textContent = '⬡ ULTRON';
+  const icons = { chat:'⬡ ULTRON', code:'⬡ CODE.EXE', create:'⬡ CREATIVE', research:'⬡ RESEARCH', business:'⬡ BIZ MGR' };
+  label.textContent = icons[mode];
   div.appendChild(label);
-
   const bubble = document.createElement('div');
   bubble.className = 'msg-bubble';
   bubble.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
   div.appendChild(bubble);
-
-  msgs.appendChild(div);
-  msgs.scrollTop = msgs.scrollHeight;
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
   return div;
 }
 
-function clearChat() {
-  messages = [];
-  msgCount = 0;
-  document.getElementById('msgCount').textContent = 'MESSAGES: 0';
-  const msgs = document.getElementById('messages');
-  msgs.innerHTML = '';
-  const welcome = document.createElement('div');
-  welcome.id = 'welcomeState';
-  welcome.className = 'welcome';
-  welcome.innerHTML = `
-    <div class="welcome-logo">
-      <div class="welcome-ring"></div>
-      <div class="welcome-ring2"></div>
-      <svg viewBox="0 0 24 24" fill="none" stroke="#e63946" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-      </svg>
-    </div>
-    <h1>ULTRON</h1>
-    <p>SESSION CLEARED — READY FOR NEW COMMANDS</p>
-    <div class="welcome-chips">
-      <button class="welcome-chip" onclick="sendQuick('What can you do?')">CAPABILITIES?</button>
-      <button class="welcome-chip" onclick="sendQuick('Write me a Python script to scrape data from a website.')">WRITE CODE</button>
-      <button class="welcome-chip" onclick="sendQuick('Analyze the pros and cons of AI in business.')">ANALYZE</button>
-      <button class="welcome-chip" onclick="sendQuick('Tell me something surprising about the universe.')">SURPRISE ME</button>
-    </div>`;
-  msgs.appendChild(welcome);
+function setLoading(mode, val) {
+  state[mode].loading = val;
+  document.getElementById('send-' + mode).disabled = val;
+}
+
+async function callChat(system, messages, maxTokens) {
+  const res = await fetch('/api/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ model: 'anthropic/claude-sonnet-4-5', max_tokens: maxTokens, system, messages })
+  });
+  const data = await res.json();
+  return data.content?.[0]?.text || data.error?.message || 'No response.';
+}
+
+async function sendChat() {
+  const ta = document.getElementById('input-chat-ta');
+  const text = ta.value.trim();
+  if (!text || state.chat.loading) return;
+  setLoading('chat', true);
+  ta.value = ''; ta.style.height = 'auto'; updateCount('chat', ta);
+  state.chat.messages.push({ role: 'user', content: text });
+  appendMsg('chat', 'user', text);
+  const typing = appendTyping('chat');
+  try {
+    const reply = await callChat(SYSTEM_PROMPTS.chat, state.chat.messages, 1500);
+    state.chat.messages.push({ role: 'assistant', content: reply });
+    typing.remove(); appendMsg('chat', 'assistant', reply);
+  } catch(e) { typing.remove(); appendMsg('chat', 'assistant', '⚠️ ERROR: ' + e.message); }
+  setLoading('chat', false);
+  document.getElementById('msgCount').textContent = 'MESSAGES: ' + (totalMsgs += 2);
+}
+
+async function sendCode() {
+  const ta = document.getElementById('input-code-ta');
+  const text = ta.value.trim();
+  if (!text || state.code.loading) return;
+  setLoading('code', true);
+  ta.value = ''; ta.style.height = 'auto'; updateCount('code', ta);
+  state.code.messages.push({ role: 'user', content: text });
+  appendMsg('code', 'user', text);
+  const typing = appendTyping('code');
+  try {
+    const reply = await callChat(SYSTEM_PROMPTS.code, state.code.messages, 2000);
+    state.code.messages.push({ role: 'assistant', content: reply });
+    typing.remove(); appendMsg('code', 'assistant', reply);
+  } catch(e) { typing.remove(); appendMsg('code', 'assistant', '⚠️ ERROR: ' + e.message); }
+  setLoading('code', false);
+  document.getElementById('msgCount').textContent = 'MESSAGES: ' + (totalMsgs += 2);
+}
+
+async function sendCreate() {
+  const ta = document.getElementById('input-create-ta');
+  const text = ta.value.trim();
+  if (!text || state.create.loading) return;
+  setLoading('create', true);
+  ta.value = ''; ta.style.height = 'auto'; updateCount('create', ta);
+  state.create.messages.push({ role: 'user', content: text });
+  appendMsg('create', 'user', text);
+  const typing = appendTyping('create');
+  try {
+    const reply = await callChat(SYSTEM_PROMPTS.create, state.create.messages, 2000);
+    state.create.messages.push({ role: 'assistant', content: reply });
+    typing.remove(); appendMsg('create', 'assistant', reply);
+  } catch(e) { typing.remove(); appendMsg('create', 'assistant', '⚠️ ERROR: ' + e.message); }
+  setLoading('create', false);
+  document.getElementById('msgCount').textContent = 'MESSAGES: ' + (totalMsgs += 2);
+}
+
+async function sendResearch() {
+  const ta = document.getElementById('input-research-ta');
+  const text = ta.value.trim();
+  if (!text || state.research.loading) return;
+  setLoading('research', true);
+  ta.value = ''; ta.style.height = 'auto'; updateCount('research', ta);
+  const depthMap = {
+    standard: 'Provide a comprehensive research report with key findings and analysis.',
+    deep: 'Provide an extremely detailed deep-dive. Cover all angles, statistics, case studies, expert opinions.',
+    academic: 'Provide an academic-style report with methodology, literature review, data analysis, and formal references.'
+  };
+  const query = `${text}\n\nDEPTH: ${researchDepth.toUpperCase()}\n${depthMap[researchDepth]}`;
+  state.research.messages.push({ role: 'user', content: text });
+  appendMsg('research', 'user', text);
+  const typing = appendTyping('research');
+  try {
+    const res = await fetch('/api/research', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query, messages: state.research.messages.slice(-6) })
+    });
+    const data = await res.json();
+    const reply = data.content?.[0]?.text || data.error?.message || 'No response.';
+    state.research.messages.push({ role: 'assistant', content: reply });
+    typing.remove(); appendMsg('research', 'assistant', reply);
+  } catch(e) { typing.remove(); appendMsg('research', 'assistant', '⚠️ ERROR: ' + e.message); }
+  setLoading('research', false);
+  document.getElementById('msgCount').textContent = 'MESSAGES: ' + (totalMsgs += 2);
+}
+
+async function sendBusiness() {
+  const ta = document.getElementById('input-business-ta');
+  const text = ta.value.trim();
+  if (!text || state.business.loading) return;
+  setLoading('business', true);
+  ta.value = ''; ta.style.height = 'auto'; updateCount('business', ta);
+  const bizCtx = document.getElementById('bizContext').value.trim();
+  state.business.messages.push({ role: 'user', content: text });
+  appendMsg('business', 'user', text);
+  const typing = appendTyping('business');
+  try {
+    const res = await fetch('/api/business', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: state.business.messages, businessContext: bizCtx })
+    });
+    const data = await res.json();
+    const reply = data.content?.[0]?.text || data.error?.message || 'No response.';
+    state.business.messages.push({ role: 'assistant', content: reply });
+    typing.remove(); appendMsg('business', 'assistant', reply);
+  } catch(e) { typing.remove(); appendMsg('business', 'assistant', '⚠️ ERROR: ' + e.message); }
+  setLoading('business', false);
+  document.getElementById('msgCount').textContent = 'MESSAGES: ' + (totalMsgs += 2);
+}
+
+function clearPanel(mode) {
+  state[mode].messages = [];
+  const c = document.getElementById('msgs-' + mode);
+  const logos = {
+    chat: `<div class="welcome-logo"><div class="welcome-ring"></div><svg viewBox="0 0 24 24" fill="none" stroke="#e63946" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><h1>ULTRON</h1><p>SESSION CLEARED</p>`,
+    code: `<div class="welcome-logo"><svg viewBox="0 0 24 24" fill="none" stroke="#e63946" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div><h1 style="font-size:22px">CODE MODULE</h1><p>SESSION CLEARED</p>`,
+    create: `<div class="welcome-logo"><svg viewBox="0 0 24 24" fill="none" stroke="#e63946" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><h1 style="font-size:22px">CREATIVE ENGINE</h1><p>SESSION CLEARED</p>`,
+    research: `<div class="welcome-logo" style="border-color:var(--blue);background:var(--blue-glow)"><svg viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div><h1 style="color:var(--blue);font-size:22px">RESEARCH</h1><p>SESSION CLEARED</p>`,
+    business: `<div class="welcome-logo" style="border-color:var(--green);background:var(--green-glow)"><svg viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><h1 style="color:var(--green);font-size:20px">BUSINESS MANAGER</h1><p>SESSION CLEARED</p>`
+  };
+  c.innerHTML = `<div class="welcome" id="welcome-${mode}">${logos[mode]}</div>`;
 }
 
 init();
